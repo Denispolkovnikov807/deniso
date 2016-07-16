@@ -21,16 +21,16 @@ if ( !AxeUlti.checked )
 	var HEnts = Game.PlayersHeroEnts()
 	for (i in HEnts) {
 		ent = HEnts[i]
-		entPos = Entities.GetAbsOrigin(ent)
 		cast = true
 		if(ent==Me)
 			continue	
+		if ( !Entities.IsEnemy(ent) || !Entities.IsAlive(ent) || Entities.GetAllHeroEntities().indexOf(ent)==-1 )
+			continue
+		entPos = Entities.GetAbsOrigin(ent)
 		if (Game.PointDistance(entPos,MyPos) >  rangeCast) {
 			cast = false
 		}
 		if (cast){
-			if ( !Entities.IsEnemy(ent) || !Entities.IsAlive(ent) || Entities.GetAllHeroEntities().indexOf(ent)==-1 )
-				continue
 			var HP = Entities.GetHealth(ent)
 			if ( HP <= UltiDmg ){
 				GameUI.SelectUnit(Me, false);
