@@ -60,8 +60,6 @@ function DagonStealerF(){
 	if ( !DagonStealer.checked )
 		return
 	var Me = Players.GetPlayerHeroEntityIndex(Game.GetLocalPlayerID())
-	var Ulti = Entities.GetAbility(Me, 3)
-	$.Msg(Abilities.GetCastRange(Ulti))
 	if (Game.GetAbilityByName(Me,'item_dagon') != -1) 
 	{
 		ItemDagon = Game.GetAbilityByName(Me,'item_dagon')
