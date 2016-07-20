@@ -6,7 +6,14 @@
 //СЧИТАЕТ УСИЛЕНИЕ СПОМОБНОСТЕЙ, TODO
 //ОБРАБОТКА АБАДОНА, ОБРАБОТКИ ЛИНКИ
 
-var interval = 4
+//На основе скрипта ZeusAutoult by D2JS(https://vk.com/exieros)
+//Автоматически использует дагон когда у вражеского героя мало здоровья.
+//Автоматически расчитывает маг. резист, уровень дагона.
+//Распространяется под лицензией "GNU General Public License" https://jxself.org/translations/gpl-2.ru.shtml
+
+//ВНИМАНИЕ, НЕ СЧИТАЕТ УСИЛЕНИЕ СПОМОБНОСТЕЙ, TODO
+
+var interval = 0.1
 var damage = [400,500,600,700,800]
 var manacost = [35,30,25,20,15]
 var manacoste = 100
@@ -165,8 +172,19 @@ function DagonStealerF(){
 
 			var HP = Entities.GetHealth(ent)
 			if ( HP <= dmgclear ){
-				Game.CastTarget(Me, ItemDagon,ent,false)
-				$.Msg(HP,'<',dmgclear)
+				if (Game.GetAbilityByName(ent,'item_sphere') != -1)
+				{ 
+					var Linka = Game.GetAbilityByName(ent,'item_sphere')
+					if (Abilities.GetCooldownTimeRemaining(Linka) != 0)
+					{
+						Game.CastTarget(Me, ItemDagon,ent,false)
+						$.Msg(HP,'<',dmgclear)
+					}
+
+				} else {
+					Game.CastTarget(Me, ItemDagon,ent,false)
+					$.Msg(HP,'<',dmgclear)
+				}
 			}
 			cast = false
 		}
