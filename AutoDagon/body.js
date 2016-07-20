@@ -3,9 +3,10 @@
 //Автоматически расчитывает маг. резист, уровень дагона.
 //Распространяется под лицензией "GNU General Public License" https://jxself.org/translations/gpl-2.ru.shtml
 
-//ВНИМАНИЕ, НЕ СЧИТАЕТ УСИЛЕНИЕ СПОМОБНОСТЕЙ, TODO
+//СЧИТАЕТ УСИЛЕНИЕ СПОМОБНОСТЕЙ, TODO
+//ОБРАБОТКА АБАДОНА, ОБРАБОТКИ ЛИНКИ
 
-var interval = 0.1
+var interval = 4
 var damage = [400,500,600,700,800]
 var manacost = [35,30,25,20,15]
 var manacoste = 100
@@ -57,7 +58,7 @@ var BuffsAddMagicDmgForMe = [
 ] 
 
 function DagonStealerF(){
-	if ( !DagonStealer.checked )
+	if (!DagonStealer.checked )
 		return
 	var Me = Players.GetPlayerHeroEntityIndex(Game.GetLocalPlayerID())
 	if (Game.GetAbilityByName(Me,'item_dagon') != -1) 
@@ -85,6 +86,7 @@ function DagonStealerF(){
 		ItemDagon = Game.GetAbilityByName(Me,'item_dagon_5')
 		DagonLvl = 4
 	}
+
 	if (ItemDagon == -1)
 		return
 	if (Game.GetAbilityByName(Me, 'item_aether_lens') !=-1)
@@ -143,7 +145,24 @@ function DagonStealerF(){
 			if (Lense)
 				MagicDamage = MagicDamage * 1.05
 
+
+			var Inv = Game.GetInventory(Me) 
+			var TempInt = 0;
+			for(key in Inv){
+				var Item = parseInt(Inv[key])
+				TempInt += Abilities.GetSpecialValueFor( Item, 'bonus_intellect' )
+				TempInt += Abilities.GetSpecialValueFor( Item, 'bonus_all_stats' )
+			}
+			var StatAbil = Entities.GetAbilityByName(Me, "attribute_bonus")
+			var TempStat = Game.GetStats(Entities.GetUnitName(Me))
+			TempInt += TempStat[6] + (TempStat[7] * (Entities.GetLevel(Me)) - TempStat[7]) + 2 * (Abilities.GetLevel(StatAbil))
+			var Int = TempInt / 16
+			MagicDamage = MagicDamage * (1 + Int / 100)
+
 			var dmgclear = MagicDamage - MagicDamage/100*MagicResist
+
+
+
 			var HP = Entities.GetHealth(ent)
 			if ( HP <= dmgclear ){
 				Game.CastTarget(Me, ItemDagon,ent,false)
@@ -171,8 +190,5 @@ var DagonStealerOnCheckBoxClick = function(){
 	Game.ScriptLogMsg('Скрипт активирован: DagonStealer', '#00ff00')
 }
 
-//шаблонное добавление чекбокса в панель
-var Temp = $.CreatePanel( "Panel", $('#scripts'), "DagonStealer" )
-Temp.SetPanelEvent( 'onactivate', DagonStealerOnCheckBoxClick )
-Temp.BLoadLayoutFromString( '<root><styles><include src="s2r://panorama/styles/dotastyles.vcss_c" /><include src="s2r://panorama/styles/magadan.vcss_c" /></styles><Panel><ToggleButton class="CheckBox" id="DagonStealer" text="DagonStealer"/></Panel></root>', false, false)  
-var DagonStealer = $.GetContextPanel().FindChildTraverse( 'DagonStealer' ).Children()[0]
+
+var DagonStealer = Game.AddScript(1, "DagonStealer", DagonStealerOnCheckBoxClick)
