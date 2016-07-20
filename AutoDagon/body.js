@@ -9,7 +9,6 @@
 
 
 
-
 var interval = 0.1
 var damage = [400,500,600,700,800]
 var manacost = [35,30,25,20,15]
@@ -181,11 +180,13 @@ function DagonStealerF(){
 					var Linka = Game.GetAbilityByName(ent,'item_sphere')
 					if (Abilities.GetCooldownTimeRemaining(Linka) != 0)
 					{
+						GameUI.SelectUnit(Me, false);
 						Game.CastTarget(Me, ItemDagon,ent,false)
 						$.Msg(HP,'<',dmgclear)
 					}
 
 				} else {
+					GameUI.SelectUnit(Me, false);
 					Game.CastTarget(Me, ItemDagon,ent,false)
 					$.Msg(HP,'<',dmgclear)
 				}
@@ -198,11 +199,13 @@ function DagonStealerF(){
 					var Linka = Game.GetAbilityByName(ent,'item_sphere')
 					if (Abilities.GetCooldownTimeRemaining(Linka) != 0)
 					{
+						GameUI.SelectUnit(Me, false);
 						Game.CastTarget(Me, ItemDagon,ent,false)
 						$.Msg(HP,'<',dmgclear)
 					}
 
 				} else {
+					GameUI.SelectUnit(Me, false);
 					Game.CastTarget(Me, ItemDagon,ent,false)
 					$.Msg(HP,'<',dmgclear)
 				}
@@ -231,6 +234,5 @@ var DagonStealerOnCheckBoxClick = function(){
 	f()
 	Game.ScriptLogMsg('Скрипт активирован: DagonStealer', '#00ff00')
 }
-
 
 var DagonStealer = Game.AddScript(1, "DagonStealer", DagonStealerOnCheckBoxClick)
