@@ -23,7 +23,7 @@ var Lense = false
 var cast
 
 var IgnoreBuffs = [
-	//"modifier_abaddon_borrowed_time",
+	"modifier_abaddon_borrowed_time",
 	"modifier_brewmaster_primal_split",
 	"modifier_omniknight_repel",
 	"modifier_phoenix_supernova_hiding",
