@@ -3,8 +3,10 @@
 //Автоматически расчитывает маг. резист, уровень дагона.
 //Распространяется под лицензией "GNU General Public License" https://jxself.org/translations/gpl-2.ru.shtml
 
-//СЧИТАЕТ УСИЛЕНИЕ СПОМОБНОСТЕЙ, УЧИТЫВАЕТ ЛИНКУ TODO
-//ОБРАБОТКА АБАДОНА
+//СЧИТАЕТ УСИЛЕНИЕ СПОМОБНОСТЕЙ, УЧИТЫВАЕТ ЛИНКУ, ОБРАБОТКА АБАДОНА 
+//TODO:
+// Авто блинк и езериал
+
 
 
 
@@ -162,11 +164,18 @@ function DagonStealerF(){
 			MagicDamage = MagicDamage * (1 + Int / 100)
 
 			var dmgclear = MagicDamage - MagicDamage/100*MagicResist
+			var bool1 = false
 
+			if (Entities.GetUnitName(ent) == "npc_dota_hero_abaddon")
+			{
+				var ult = Entities.GetAbility(ent, 3)
+				if (Abilities.GetCooldownTimeRemaining(ult) == 0)
+					bool1 = true
+			}
 
-
-			var HP = Entities.GetHealth(ent)
-			if ( HP <= dmgclear ){
+			if (bool1){
+				var HP = Entities.GetHealth(ent)
+				if ( HP <= dmgclear && HP>400 ){
 				if (Game.GetAbilityByName(ent,'item_sphere') != -1)
 				{ 
 					var Linka = Game.GetAbilityByName(ent,'item_sphere')
@@ -181,6 +190,26 @@ function DagonStealerF(){
 					$.Msg(HP,'<',dmgclear)
 				}
 			}
+			} else {
+				var HP = Entities.GetHealth(ent)	
+				if ( HP <= dmgclear ){
+				if (Game.GetAbilityByName(ent,'item_sphere') != -1)
+				{ 
+					var Linka = Game.GetAbilityByName(ent,'item_sphere')
+					if (Abilities.GetCooldownTimeRemaining(Linka) != 0)
+					{
+						Game.CastTarget(Me, ItemDagon,ent,false)
+						$.Msg(HP,'<',dmgclear)
+					}
+
+				} else {
+					Game.CastTarget(Me, ItemDagon,ent,false)
+					$.Msg(HP,'<',dmgclear)
+				}
+			}
+			}
+				
+			
 			cast = false
 		}
 
