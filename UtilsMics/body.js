@@ -128,8 +128,7 @@ Game.GetStats = function(a){
 	for (i = 0; stats.length - 1; i++){
 		if (a == stats[i][0])
 		{
-			$.Msg(stats[i])
-			return
+			return	stats[i]
 		}
 	}
 }
